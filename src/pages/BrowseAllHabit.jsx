@@ -21,19 +21,13 @@ const BrowseAllHabit = () => {
       setLoading(false)
     })
   }
-
-
-
-  
-
-
   return (
     <div>
-      <div className="text-2xl text-center font-bold"> All Models</div>
-      <p className=" text-center ">Explore 3d models.</p>
+      <div className="text-2xl text-center font-bold"> All Habits!</div>
+      <p className=" text-center ">Explore habits.</p>
      
      <form onSubmit={handleSearch} className=" mt-5 mb-10 flex gap-2 justify-center">
-       <label className="input rounded-full ">
+       <label className="input ">
         <svg
           className="h-[1em] opacity-50"
           xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +46,7 @@ const BrowseAllHabit = () => {
         </svg>
         <input name="search" type="search"  placeholder="Search" />
       </label>
-      <button className="btn btn-secondary  rounded-full">{loading ? "Searching...." : "Search"}</button>
+      <button className="btn btn-soft">{loading ? "Searching...." : "Search"}</button>
      </form>
 
       <div className="grid grid-cols-3 lg:grid-cols-4 gap-3">

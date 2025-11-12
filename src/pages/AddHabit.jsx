@@ -181,7 +181,7 @@ const AddHabit = () => {
         <button
           type="submit"
           disabled={uploading}
-          className="btn w-full bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white"
+          className="btn w-full bg-linear-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white"
         >
           {uploading ? "Uploading..." : "Add Habit"}
         </button>

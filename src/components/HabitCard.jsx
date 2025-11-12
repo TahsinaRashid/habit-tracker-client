@@ -53,14 +53,14 @@ export const HabitCard = ({ habit = {} }) => {
       </figure>
       <div className="card-body">
         <h2 className="card-title text-lg md:text-xl">{name}</h2>
-        <div className="badge text-xs badge-secondary rounded-full">{category}</div>
+        <div className="badge text-xs badge-soft ">{category}</div>
         <div className="text-xs text-secondary">{created_by}</div>
         <p className="line-clamp-1 text-sm md:text-base mt-1">{description}</p>
 
         <div className="card-actions justify-center mt-4">
           <Link
             to={`/habit-details/${_id}`}
-            className="btn rounded-full bg-gradient-to-r from-pink-500 to-red-600 hover:from-red-600 hover:to-pink-500 text-white w-full btn-sm"
+            className="btn bg-linear-to-r from-green-500 to-green-800  text-white w-full btn-sm"
           >
             View
           </Link>
