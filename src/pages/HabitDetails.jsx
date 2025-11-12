@@ -1,6 +1,6 @@
 
 import { use, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../Context/AuthContext";
 import toast from "react-hot-toast";
@@ -69,7 +69,7 @@ const HabitDetails = () => {
   };
 
   const handleDownload = () => {
-    const finalModel = {
+    const finalHabit = {
       name: habit.name,
       downloads: habit.downloads,
       created_by: habit.created_by,
@@ -84,7 +84,7 @@ const HabitDetails = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(finalModel),
+      body: JSON.stringify(finalHabit),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -113,9 +113,6 @@ const HabitDetails = () => {
       });
   };
 
-  // if (loading) {
-  //   return <div> Loading...</div>;
-  // }
 
    if (loading || !habit) {
     return (
@@ -123,6 +120,7 @@ const HabitDetails = () => {
             <span className="loading loading-dots loading-lg text-primary"></span>
         </div>
     );
+    
   }
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-6 lg:p-8">

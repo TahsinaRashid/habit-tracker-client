@@ -1,8 +1,7 @@
-
 import { Link } from "react-router";
 
-export const HabitCard = ({model}) => {
-    const {name, thumbnail, category, description, _id, created_by} = model
+export const HabitCard = ({habit}) => {
+    const {name, thumbnail, category, description, _id, created_by} = habit
   return (
     <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
       <figure className="h-48 overflow-hidden">

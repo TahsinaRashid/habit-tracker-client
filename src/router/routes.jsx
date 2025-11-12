@@ -11,6 +11,7 @@ import MyDownloads from "../pages/MyDownloads";
 import UpdateHabit from "../pages/UpdateHabit";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Registration";
+import ErrorPage from "../pages/ErrorPage";
 
 export const router = createBrowserRouter([
   {
@@ -88,5 +89,10 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
     ],
+  },
+  {
+    path: '/*',
+    Component: ErrorPage , 
+    
   },
 ]);

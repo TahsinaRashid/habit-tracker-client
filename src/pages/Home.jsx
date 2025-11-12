@@ -1,5 +1,3 @@
-
-
 import { useLoaderData } from "react-router";
 import Banner from "../components/Banner";
 import { HabitCard } from "../components/HabitCard";
@@ -9,11 +7,10 @@ const Home = () => {
     return (
         <div>
             <Banner/>
-
-            <div className="text-center text-xl font-bold mt-10">Latest Model</div>
-
-             <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 mt-10">
-         {data.map(model => <HabitCard key={model._id} model={model}/>)}
+            <div className="text-center text-xl font-bold md:pt-5 ">
+                Featured Habits</div>
+        <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 mt-5">
+         {data.map(habit => <HabitCard key={habit._id} habit={habit}/>)}
       </div>
             
         </div>
