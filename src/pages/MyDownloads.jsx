@@ -36,8 +36,8 @@ const MyDownloads = () => {
 
 {/* Add a check for models existence and if it's an array */}
 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-  {models && Array.isArray(models) && models.map(model => (
-    <HabitCard key={model._id} model={model} />
+  {models && Array.isArray(models) && models.map(habit => (
+    <HabitCard key={habit._id} habit={habit} />
   ))}
 </div>
     </div>
