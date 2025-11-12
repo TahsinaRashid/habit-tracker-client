@@ -1,0 +1,177 @@
+import React from "react";
+import { Link, NavLink } from "react-router";
+import { IoLogoModelS } from "react-icons/io";
+import { GoHome, GoHomeFill } from "react-icons/go";
+import { IoLogIn, IoLogOut } from "react-icons/io5";
+import { FaGear, FaLightbulb, FaRegLightbulb, FaUser } from "react-icons/fa6";
+import { ImBoxAdd } from "react-icons/im";
+import { use, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { GiLifeBar } from "react-icons/gi";
+import { MdBookmarkAdded } from "react-icons/md";
+import { PiScrollBold } from "react-icons/pi";
+import { FiMoon, FiSun } from "react-icons/fi";
+
+const NavBar = () => {
+  const { user, signOutUser } = use(AuthContext);
+
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || "light")
+
+  useEffect(() => {
+    const html = document.querySelector('html')
+     html.setAttribute("data-theme", theme)
+     localStorage.setItem("theme", theme)
+  }, [theme])
+
+
+  const handleThemeToggle = () => {
+    setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
+};
+  return (
+    <div className="navbar py-2 min-h-0 z-1 max-w-7xl">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className=" md:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {" "}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />{" "}
+            </svg>
+          </div>
+          <ul
+            tabIndex="-1"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+          >
+            <li>
+              <NavLink to={"/"}>
+                <GoHomeFill />
+                Home
+              </NavLink>
+            </li>
+            <li>
+            <NavLink to={"/add-habit"}>
+             <ImBoxAdd /> Add Habit
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/my-habit"}>
+             <MdBookmarkAdded /> My Habit
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/browse-all-habit"}>
+              <PiScrollBold /> Browse All Habit
+            </NavLink>
+          </li>
+          </ul>
+        </div>
+        <Link to={"/"} className="flex items-center gap-1 text-sm font-bold ">
+          <GiLifeBar /> Habit Tracker
+        </Link>
+      </div>
+      <div className="navbar-center hidden md:flex">
+        <ul className="menu menu-horizontal px-1 gap-1">
+          <li>
+            <NavLink to={"/"}>
+              <GoHomeFill />
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/add-habit"}>
+             <ImBoxAdd /> Add Habit
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/my-habit"}>
+             <MdBookmarkAdded /> My Habit
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/browse-all-habit"}>
+              <PiScrollBold /> Browse All Habit
+            </NavLink>
+          </li>
+        </ul>
+      </div>
+      <div className="navbar-end gap-1">
+        {user ? (
+          <div className="dropdown dropdown-end z-50">
+            <div
+              tabIndex={0}
+              role="link"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-9 border-2 border-gray-300 rounded-full">
+                <img
+                  alt="Tailwind CSS Navbar component"
+                  referrerPolicy="no-referrer"
+                  src={user.photoURL || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+                />
+              </div>
+            </div>
+            <ul
+              tabIndex="-1"
+              className="menu  menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow"
+            >
+              <div className=" pb-3 border-b border-b-gray-200">
+                <li className="text-sm font-bold">{user.displayName}</li>
+                <li className="text-xs">{user.email}</li>
+              </div>
+              <div className="flex justify-between">
+                <div>
+                   <li className="mt-2">
+                <Link to={"/profile"}>
+                  <FaUser /> Profile
+                </Link>
+              </li>
+                </div>
+                <div>
+                  <button onClick={handleThemeToggle}className="btn btn-ghost btn-circle" aria-label="Toggle theme">
+              {theme === 'dark' ? <FaLightbulb  className="h-6 w-6 text-yellow-500" /> : <FaRegLightbulb className="h-6 w-6 text-indigo-700" />}
+              </button>
+              
+                </div>
+              </div>
+              <li className="">
+                <button
+                  onClick={signOutUser}
+                  className=" btn btn-xs text-right  bg-linear-to-r from-green-500 to-green-800 text-white"
+                >
+                  <IoLogOut /> Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+          ) : (
+          <>
+           <Link
+            to={"/auth/login"}
+            className="p-2 btn rounded-full border-gray-300  btn-sm bg-linear-to-r from-green-500 to-green-800 text-white">
+            {" "}
+           Login
+          </Link>
+          <Link
+        to={"/auth/register"}
+        className="btn rounded-full border-gray-300  btn-sm bg-linear-to-r from-green-500 to-green-800 text-white" >
+        Register
+    </Link>
+       </>   
+          
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default NavBar;
