@@ -41,8 +41,6 @@ const Banner = () => {
           </div>
         ))}
       </div>
-
-      {/* Navigation buttons */}
       <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full transition"
@@ -55,8 +53,6 @@ const Banner = () => {
       >
         <FaAngleDoubleRight className="w-6 h-6" />
       </button>
-
-      {/* Dots indicator */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         {videos.map((_, i) => (
           <button
