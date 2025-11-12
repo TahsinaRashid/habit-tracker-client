@@ -69,9 +69,9 @@ const Footer = () => {
 return (
         <footer className="bg-gradient-to-r from-amber-800 to-green-600 py-12 px-4
          mt-20 text-white shadow-xl">
-          <div className= " container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-y-10 gap-x-8 text-sm">
+          <div className= " container  grid grid-cols-1 lg:grid-cols-3 gap-y-10 gap-x-8 text-sm">
             <div className="p-5 lg:col-span-1 flex flex-col space-y-3">
-              <div className="flex items-center space-x-2 text-black">
+              <div className="flex  space-x-2 text-black  items-center">
                 <GiLifeBar size={40}/>
                 <span className="text-2xl font-extrabold tracking-wide">
                   Habit Tracker
@@ -81,7 +81,7 @@ return (
                   -Build better habits, one day at a time.
                 </p>
             </div>
-            <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-10">
+            <div className="px-5 lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-10">
             <div className="flex flex-col space-y-2">
               <h3 className="text-lg font-semibold mb-2 text-black border-b border-black pb-1">
                 Contact Us
@@ -90,7 +90,8 @@ return (
                   href="mailto:habit@gmail.com"
                   className="flex items-center space-x-2 text-black font-medium transition duration-200 text-sm">habit@gmail.com
                 </a>
-                <div className="flex space-x-2 pt-4">
+                <div className="pt-4">
+               <div className="flex space-x-2 text-left ">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-500 transition duration-200">
               <FaFacebook size={24} />
             </a>
@@ -101,6 +102,7 @@ return (
               <FaInstagram size={24} />
             </a>
           </div>
+             </div>
                
                
             </div>
@@ -111,8 +113,10 @@ return (
               <Link  className="text-black font-medium transition duration-200">Terms & Conditions</Link>
               <Link  className="text-black font-medium transition duration-200">Privacy Policy</Link>
               
-            </div>          
+            </div>   
+                   
         </div>
+          
       </div>
       <div className="border-t border-black mt-12 pt-6 text-center">
         <p className="text-sm font-medium text-black">
