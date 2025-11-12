@@ -58,38 +58,38 @@ const Register = () => {
 
           <form onSubmit={handleRegister}>
             <fieldset className="fieldset space-y-2">
-              <label className="label">Name</label>
+              <label className="label text-black">Name</label>
               <input
                 type="text"
                 name="displayName"
                 required
-                className="input rounded-full focus:border-0 focus:outline-gray-200"
+                className="input focus:border-0 focus:outline-gray-200"
                 placeholder="Full Name"
               />
 
-              <label className="label">Photo URL</label>
+              <label className="label text-black">Photo URL</label>
               <input
                 type="text"
                 name="photoURL"
-                className="input rounded-full focus:border-0 focus:outline-gray-200"
+                className="input  focus:border-0 focus:outline-gray-200"
                 placeholder="Profile Picture URL"
               />
 
-              <label className="label">Email</label>
+              <label className="label text-black">Email</label>
               <input
                 type="email"
                 name="email"
                 required
-                className="input rounded-full focus:border-0 focus:outline-gray-200"
+                className="input focus:border-0 focus:outline-gray-200"
                 placeholder="Email"
               />
 
-              <label className="label">Password</label>
+              <label className="label text-black">Password</label>
               <input
                 type="password"
                 name="password"
                 required
-                className="input rounded-full focus:border-0 focus:outline-gray-200"
+                className="input  focus:border-0 focus:outline-gray-200"
                 placeholder="Password"
               />
 
@@ -112,7 +112,7 @@ const Register = () => {
           <p className="text-center mt-4 text-sm">
             Already have an account?{" "}
             <Link
-              className=" font-semibold hover:text-blue-500 underline"
+              className=" text-blue-500 font-semibold hover:text-blue-800 underline"
               to="/auth/login"
             >
               Login
