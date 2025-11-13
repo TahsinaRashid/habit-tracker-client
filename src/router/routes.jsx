@@ -50,7 +50,10 @@ export const router = createBrowserRouter([
           <PrivateRoute>
             <HabitDetails />
           </PrivateRoute>
+          
+          
         ),
+        loader: ({params}) => fetch(`http://localhost:7000/addHabit/${params.id}`)
       },
 
        {

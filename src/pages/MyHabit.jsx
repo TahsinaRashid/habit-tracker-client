@@ -1,48 +1,130 @@
-import { use, useEffect, useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
-import { HabitCard } from "../components/HabitCard";
+import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+
 const MyHabit = () => {
-    const {user} = use(AuthContext)
-    const [models, setModels] = useState([])
-    const [loading, setLoading] = useState(true)
+  const { user } = useContext(AuthContext);
+  const [habits, setHabits] = useState([]);
+  const [newHabit, setNewHabit] = useState({
+    habitTitle: "",
+    description: "",
+    category: "",
+    imageUrl: ""
+  });
+  const fetchHabits = () => {
+    fetch('http://localhost:7000/addHabit')
+      .then(res => res.json())
+      .then(data => {
+        const myHabits = data.filter(h => h.userEmail === user.email);
+        setHabits(myHabits);
+      });
+  };
 
-    useEffect(()=> {
+  useEffect(() => {
+    fetchHabits();
+  }, []);
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setNewHabit(prev => ({ ...prev, [name]: value }));
+  };
 
-        fetch(`https://3d-model-server.vercel.app/my-models?email=${user.email}`, {
-            headers: {
-                authorization: `Bearer ${user.accessToken}`
-            }
-        })
-        .then(res=> res.json())
-        .then(data=> {
-            
-            setModels(data)
-            setLoading(false)
-        })
+  const handleAddHabit = e => {
+    e.preventDefault();
+    const habitData = {
+      ...newHabit,
+      userName: user.name,
+      userEmail: user.email,
+      createdAt: new Date(),
+      completionHistory: [],
+      currentStreak: 0
+    };
 
-    }, [user])
+    fetch('http://localhost:7000/addHabit', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(habitData)
+    })
+      .then(res => res.json())
+      .then(() => {
+        toast.success("Habit added!");
+        setHabits(prev => [...prev, habitData]);
+        setNewHabit({ habitTitle: "", description: "", category: "", imageUrl: "" });
+      });
+  };
+  const handleDelete = id => {
+    if (!window.confirm("Are you sure you want to delete this habit?")) return;
 
+    fetch(`http://localhost:7000/addHabit/${id}`, { method: "DELETE" })
+      .then(res => res.json())
+      .then(() => {
+        toast.success("Habit deleted!");
+        setHabits(prev => prev.filter(h => h._id !== id));
+      });
+  };
+  const handleMarkComplete = habit => {
+    const today = new Date().toDateString();
+    const completedDates = habit?.completionHistory?.map(d => new Date(d).toDateString()) || [];
 
-    if(loading) {
-        return <div> Please wait ... Loading...</div>
+    if (completedDates.includes(today)) {
+      toast.error("Already completed today!");
+      return;
     }
 
-    return (
-        <div>
-              {/* <div className="grid grid-cols-3 lg:grid-cols-4 gap-3">
-                     {models.map(model => <HabitCard key={model._id} model={model}/>)}
-                  </div> */}
-    
+    const updatedHistory = [...completedDates, today];
 
-{/* Add a check for models existence and if it's an array */}
-<div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-  {models && Array.isArray(models) && models.map(model => (
-    <HabitCard key={model._id} model={model} />
-  ))}
-</div>
-            
-        </div>
-    );
+    fetch(`http://localhost:7000/addHabit/${habit._id}/complete`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ completionHistory: updatedHistory }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        toast.success("Habit marked complete!");
+        setHabits(prev => prev.map(h => h._id === habit._id ? data.result : h));
+      });
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4">My Habits</h1>
+      <form onSubmit={handleAddHabit} className="flex flex-col gap-2 mb-6">
+        <input type="text" name="habitTitle" placeholder="Title" value={newHabit.habitTitle} onChange={handleChange} required className="input input-bordered w-full" />
+        <input type="text" name="category" placeholder="Category" value={newHabit.category} onChange={handleChange} required className="input input-bordered w-full" />
+        <textarea name="description" placeholder="Description" value={newHabit.description} onChange={handleChange} required className="textarea textarea-bordered w-full" />
+        <input type="text" name="imageUrl" placeholder="Image URL (optional)" value={newHabit.imageUrl} onChange={handleChange} className="input input-bordered w-full" />
+        <button type="submit" className="btn btn-sm text-right  bg-linear-to-r from-green-500 to-green-800 text-white">Add Habit</button>
+      </form>
+      <table className="table-auto w-full border border-gray-200">
+        <thead className="bg-gray-100">
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Current Streak</th>
+            <th>Created Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {habits.map(habit => (
+            <tr key={habit._id} className="border-t">
+              <td>{habit.habitTitle}</td>
+              <td>{habit.category}</td>
+              <td>{habit.currentStreak || 0}</td>
+              <td>{new Date(habit.createdAt).toLocaleDateString()}</td>
+              <td className="flex gap-2">
+                <Link to={`/update-habit/${habit._id}`} className="btn btn-sm text-right  bg-linear-to-r from-green-500 to-green-800 text-white">Update</Link>
+                <button onClick={() => handleDelete(habit._id)} className="btn btn-sm text-right  bg-linear-to-r from-green-500 to-green-800 text-white">Delete</button>
+                <button onClick={() => handleMarkComplete(habit)} className="btn btn-sm text-right  bg-linear-to-r from-green-500 to-green-800 text-white">Mark Complete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default MyHabit;
+
+
