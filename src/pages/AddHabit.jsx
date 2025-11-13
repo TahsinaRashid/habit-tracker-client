@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import React, { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
-const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY";
 
 const AddHabit = () => {
   const { user } = useContext(AuthContext);
-  const [uploading, setUploading] = useState(false);
 
   if (!user) {
     return <p className="text-center mt-10">Please login to add a habit.</p>;
@@ -16,66 +14,35 @@ const AddHabit = () => {
     e.preventDefault();
     const form = e.target;
 
-    const title = form.title.value.trim();
+    const habitTitle = form.habitTitle.value.trim();
     const description = form.description.value.trim();
     const category = form.category.value;
     const reminderTime = form.reminderTime.value;
-    const imageFile = form.image.files[0]; 
+    const imageUrl = form.imageUrl.value.trim();
+    const isPublic = form.isPublic.checked;
 
-    if (!title || !description || !category || !reminderTime) {
+    if (!habitTitle || !description || !category || !reminderTime) {
       toast.error("Please fill in all required fields!");
       return;
     }
 
-    toast.loading("Adding habit...", { id: "add-habit" });
-
-    let imageUrl = "";
-
-    if (imageFile) {
-      setUploading(true);
-      const formData = new FormData();
-      formData.append("image", imageFile);
-
-      try {
-        const res = await fetch(
-          `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        const data = await res.json();
-        if (data.success) {
-          imageUrl = data.data.url;
-          toast.success("Image uploaded", { id: "add-habit" });
-        } else {
-          toast.error("Image upload failed", { id: "add-habit" });
-          setUploading(false);
-          return;
-        }
-      } catch (error) {
-        console.error(error);
-        toast.error("Image upload error", { id: "add-habit" });
-        setUploading(false);
-        return;
-      }
-      setUploading(false);
-    }
     const newHabit = {
-      title,
+      habitTitle,
       description,
       category,
       reminderTime,
-      image: imageUrl,
-      createdBy: {
-        email: user.email,
-        name: user.displayName || "Anonymous",
-      },
-      createdAt: new Date(),
+      imageUrl,
+      isPublic,
+      userEmail: user.email,
+      userName: user.displayName || "Anonymous",
+      createdAt: new Date().toISOString(),
+      currentStreak: 0,
     };
 
+    toast.loading("Adding habit...", { id: "add-habit" });
+
     try {
-      const res = await fetch("https://your-server-url.vercel.app/habits", {
+      const res = await fetch("http://localhost:7000/addHabit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newHabit),
@@ -97,37 +64,37 @@ const AddHabit = () => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-md mx-auto bg-base-100 p-8 rounded-2xl shadow-lg mt-10"
+      className="max-w-md mx-auto bg-green-100 p-8 shadow-lg mt-10"
     >
       <h2 className="text-2xl font-bold mb-6 text-center">Add New Habit</h2>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="label font-sm text-black">Habit Title</label>
+          <label className="label font-semibold text-black">Habit Title</label>
           <input
             type="text"
-            name="title"
+            name="habitTitle"
             placeholder="Enter habit title"
             required
-            className="input w-full  focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="input input-bordered w-full"
           />
         </div>
         <div>
-          <label className="labelfont-sm text-black">Description</label>
+          <label className="label font-semibold text-black">Description</label>
           <textarea
             name="description"
             placeholder="Describe your habit"
             required
-            rows={4}
-            className="textarea w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+            rows={3}
+            className="textarea textarea-bordered w-full"
           />
         </div>
         <div>
-          <label className="label font-sm text-black">Category</label>
+          <label className="label font-semibold text-black">Category</label>
           <select
             name="category"
             required
-            className="select w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="select select-bordered w-full "
             defaultValue=""
           >
             <option value="" disabled>
@@ -141,49 +108,51 @@ const AddHabit = () => {
           </select>
         </div>
         <div>
-          <label className="label font-sm text-black ">Reminder Time</label>
+          <label className="label font-semibold text-black">Reminder Time</label>
           <input
             type="time"
             name="reminderTime"
             required
-            className="input w-full focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="input input-bordered w-full"
           />
         </div>
         <div>
-          <label className="label font-sm text-black">Upload Image (Optional)</label>
+          <label className="label font-semibold text-black">Image URL (Optional)</label>
           <input
-            type="file"
-            name="image"
-            accept=".jpg"
-            className="file-input w-full"
+            type="url"
+            name="imageUrl"
+            placeholder="https://example.com/image.jpg"
+            className="input input-bordered w-full"
           />
         </div>
+        <div className="flex items-center gap-2">
+          <input type="checkbox" name="isPublic" defaultChecked />
+          <label className="text-sm font-medium text-black">Make Public</label>
+        </div>
         <div>
-          <label className="label font-sm text-black">User Email</label>
+          <label className="label font-semibold text-black">User Email</label>
           <input
             type="email"
             value={user.email}
             readOnly
-            disabled
-            className="input w-full rounded-md bg-gray-100 cursor-not-allowed"
+            className="input w-full bg-gray-100 cursor-not-allowed"
           />
         </div>
+
         <div>
-          <label className="label font-sm text-black">User Name</label>
+          <label className="label font-semibold text-black">User Name</label>
           <input
             type="text"
             value={user.displayName || "Anonymous"}
             readOnly
-            disabled
-            className="input w-full rounded-md bg-gray-100 cursor-not-allowed"
+            className="input w-full bg-gray-100 cursor-not-allowed"
           />
         </div>
         <button
           type="submit"
-          disabled={uploading}
-          className="btn w-full bg-linear-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white"
+          className="btn w-full bg-linear-to-r from-green-500 to-green-800 text-white"
         >
-          {uploading ? "Uploading..." : "Add Habit"}
+          Add Habit
         </button>
       </form>
     </motion.div>
