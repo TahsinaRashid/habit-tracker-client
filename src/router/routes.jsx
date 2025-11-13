@@ -21,12 +21,12 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        loader: () => fetch('https://3d-model-server.vercel.app/latest-models')
+        loader: () => fetch('https://habit-tracker-server-drab.vercel.app/latest-models')
       },
       {
         path: "/browse-all-habit",
         element: <BrowseAllHabit />,
-        loader: () => fetch('http://localhost:7000/addHabit')
+        loader: () => fetch('https://habit-tracker-server-drab.vercel.app/addHabit')
       },
       {
         path: "/profile",
@@ -53,7 +53,6 @@ export const router = createBrowserRouter([
           
           
         ),
-        loader: ({params}) => fetch(`http://localhost:7000/addHabit/${params.id}`)
       },
 
        {

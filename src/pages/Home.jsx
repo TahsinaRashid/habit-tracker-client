@@ -8,7 +8,7 @@ const Home = () => {
 
   // Fetch latest 6 habits from backend
   useEffect(() => {
-    fetch("http://localhost:7000/latest-habit")
+    fetch("https://habit-tracker-server-drab.vercel.app/latest-habit")
       .then(res => res.json())
       .then(result => setData(result))
       .catch(err => console.error(err));

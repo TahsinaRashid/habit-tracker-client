@@ -17,7 +17,7 @@ const UpdateHabit = () => {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:7000/addHabit/${id}`, {
+    fetch(`https://habit-tracker-server-drab.vercel.app/addHabit/${id}`, {
       headers: { authorization: `Bearer ${user?.accessToken}` },
     })
       .then((res) => res.json())
@@ -42,7 +42,7 @@ const UpdateHabit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:7000/addHabit/${id}`, {
+    fetch(`https://habit-tracker-server-drab.vercel.app/addHabit/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

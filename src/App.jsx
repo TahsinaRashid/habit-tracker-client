@@ -6,7 +6,6 @@ const userPromise=fetch('http://localhost:5000/users').then(res=>res.json())
 
 
 function App() {
-
   return (
     <>
       <h1>Users Management</h1>

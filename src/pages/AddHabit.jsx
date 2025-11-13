@@ -42,7 +42,7 @@ const AddHabit = () => {
     toast.loading("Adding habit...", { id: "add-habit" });
 
     try {
-      const res = await fetch("http://localhost:7000/addHabit", {
+      const res = await fetch("https://habit-tracker-server-drab.vercel.app/addHabit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newHabit),

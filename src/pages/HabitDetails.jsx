@@ -11,7 +11,7 @@ const HabitDetails = () => {
   const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:7000/addHabit/${id}`, {
+    fetch(`https://habit-tracker-server-drab.vercel.app/addHabit/${id}`, {
       headers: {
         authorization: `Bearer ${user?.accessToken}`,
       },
@@ -54,7 +54,7 @@ const HabitDetails = () => {
 
     const updatedHistory = [...completedDates, today.toDateString()];
 
-    fetch(`http://localhost:7000/addHabit/${habit?._id}/complete`, {
+    fetch(`https://habit-tracker-server-drab.vercel.app/addHabit/${habit?._id}/complete`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

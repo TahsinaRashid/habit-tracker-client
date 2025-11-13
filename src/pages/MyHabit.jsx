@@ -14,7 +14,7 @@ const MyHabit = () => {
     imageUrl: ""
   });
   const fetchHabits = () => {
-    fetch('http://localhost:7000/addHabit')
+    fetch('https://habit-tracker-server-drab.vercel.app/addHabit')
       .then(res => res.json())
       .then(data => {
         const myHabits = data.filter(h => h.userEmail === user.email);
@@ -50,7 +50,7 @@ const MyHabit = () => {
       currentStreak: 0
     };
 
-    fetch('http://localhost:7000/addHabit', {
+    fetch('https://habit-tracker-server-drab.vercel.app/addHabit', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(habitData)
@@ -67,7 +67,7 @@ const MyHabit = () => {
   const handleDelete = id => {
     if (!window.confirm("Are you sure you want to delete this habit?")) return;
 
-    fetch(`http://localhost:7000/addHabit/${id}`, { method: "DELETE" })
+    fetch(`https://habit-tracker-server-drab.vercel.app/addHabit/${id}`, { method: "DELETE" })
       .then(res => res.json())
       .then(() => {
         toast.success("Habit deleted!");
@@ -92,7 +92,7 @@ const MyHabit = () => {
 
     const updatedHistory = [...completedDates, today];
 
-    fetch(`http://localhost:7000/addHabit/${habit._id}/complete`, {
+    fetch(`https://habit-tracker-server-drab.vercel.app/addHabit/${habit._id}/complete`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ completionHistory: updatedHistory }),
