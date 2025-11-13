@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
       {
         path: "/browse-all-habit",
         element: <BrowseAllHabit />,
-        loader: () => fetch('https://3d-model-server.vercel.app/models')
+        loader: () => fetch('http://localhost:7000/addHabit')
       },
       {
         path: "/profile",
