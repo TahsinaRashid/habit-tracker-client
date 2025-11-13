@@ -3,57 +3,71 @@ import { HabitCard } from "../components/HabitCard";
 import { useState } from "react";
 
 const BrowseAllHabit = () => {
-  const data = useLoaderData();
-  const [models, setModels] = useState(data)
-  const [loading, setLoading] = useState(false)
-
+  const data = useLoaderData(); 
+  const [habits, setHabits] = useState(data);
+  const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
   const handleSearch = (e) => {
-    e.preventDefault()
-    const search_text = e.target.search.value
-    console.log(search_text)
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
-    fetch(`https://3d-model-server.vercel.app/search?search=${search_text}`)
-    .then(res=> res.json())
-    .then(data=> {
-      console.log(data)
-      setModels(data)
-      setLoading(false)
-    })
-  }
+    let filtered = data;
+
+    if (searchText.trim() !== "") {
+      filtered = filtered.filter(h =>
+        h.habitTitle.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+
+    if (filterCategory !== "") {
+      filtered = filtered.filter(h => h.category === filterCategory);
+    }
+
+    setHabits(filtered);
+    setLoading(false);
+  };
+
   return (
-    <div>
-      <div className="text-2xl text-center font-bold"> All Habits!</div>
-      <p className=" text-center ">Explore habits.</p>
-     
-     <form onSubmit={handleSearch} className=" mt-5 mb-10 flex gap-1.5 justify-center">
-       <label className="input ">
-        <svg
-          className="h-[1em] opacity-50"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-        >
-          <g
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            strokeWidth="2.5"
-            fill="none"
-            stroke="currentColor"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.3-4.3"></path>
-          </g>
-        </svg>
-        <input name="search" type="search"  placeholder="Search" />
-      </label>
-      <button className="btn btn-md text-right  bg-linear-to-r from-green-500 to-green-800 text-white">{loading ? "Searching...." : "Search"}</button>
-     </form>
+    <div className="max-w-6xl mx-auto p-4">
+      <h1 className="text-2xl font-bold text-center mb-2">Browse All Habits</h1>
+      <p className="text-center text-gray-600 mb-4">Search and filter public habits.</p>
+      <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 justify-center mb-6">
+        <input
+          type="text"
+          name="search"
+          placeholder="Search habits..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="input input-bordered w-full sm:w-64"
+        />
 
-      <div className="grid grid-cols-3 lg:grid-cols-4 gap-3">
-        {data.map((habit) => (
-          <HabitCard key={habit._id} habit={habit} />
-        ))}
-      </div>
+        <select
+          value={filterCategory}
+          onChange={(e) => setFilterCategory(e.target.value)}
+          className="select select-bordered w-full sm:w-48"
+        >
+          <option value="">All Categories</option>
+          <option value="Morning">Morning</option>
+          <option value="Work">Work</option>
+          <option value="Fitness">Fitness</option>
+          <option value="Evening">Evening</option>
+          <option value="Study">Study</option>
+        </select>
+
+        <button type="submit" className="btn bg-linear-to-r from-green-500 to-green-800 text-white w-full sm:w-auto">
+          {loading ? "Searching..." : "Search"}
+        </button>
+      </form>
+      {habits.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {habits.map(habit => (
+            <HabitCard key={habit._id} habit={habit} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500 mt-10">No habits found.</p>
+      )}
     </div>
   );
 };

@@ -1,15 +1,23 @@
-import { useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Banner from "../components/Banner";
 import { HabitCard } from "../components/HabitCard";
 import { motion } from "framer-motion";
 
 const Home = () => {
-  const data = useLoaderData();
-  console.log(data);
+  const [data, setData] = useState([]);
+
+  // Fetch latest 6 habits from backend
+  useEffect(() => {
+    fetch("http://localhost:7000/latest-habit")
+      .then(res => res.json())
+      .then(result => setData(result))
+      .catch(err => console.error(err));
+  }, []);
 
   return (
     <div className="min-h-screen bg-base-200">
       <Banner />
+      {/* Featured Habits Section */}
       <section className="max-w-7xl mx-auto px-4 py-10">
         <motion.h2
           initial={{ opacity: 0, y: -30 }}
@@ -26,11 +34,15 @@ const Home = () => {
           transition={{ delay: 0.2, duration: 0.6 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
-          {data.map((habit) => (
-            <HabitCard key={habit._id} habit={habit} />
-          ))}
+          {data.length > 0 ? (
+            data.map((habit) => <HabitCard key={habit._id} habit={habit} />)
+          ) : (
+            <p className="text-center col-span-full">No habits found</p>
+          )}
         </motion.div>
       </section>
+
+      {/* The rest of your Home page sections remain unchanged */}
       <section className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <motion.h2
@@ -80,6 +92,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+
       <section className="bg-green-100 py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <motion.h2
@@ -110,6 +123,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+
       <section className="py-20 text-center bg-white ">
         <motion.div
           initial={{ opacity: 0 }}

@@ -53,7 +53,7 @@ const UpdateHabit = () => {
       .then((res) => res.json())
       .then(() => {
         toast.success("Habit updated successfully!");
-        navigate("/my-habits"); 
+        navigate("/my-habit"); 
       })
       .catch((err) => console.error(err));
   };
